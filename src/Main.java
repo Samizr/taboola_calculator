@@ -8,9 +8,10 @@ public class Main {
         // Read lines in a loop
         // Run lexical / regex interpreter on line
         // Run backend on that line
+        Calculator calculator = new Calculator();
         System.out.println("Please type calculator operations:");
         BufferedReader inputReader =  new BufferedReader(new InputStreamReader(System.in));
-        inputReader.lines().forEachOrdered(System.out::println);   //TODO: Do we need the ordered? can reduce performance.
+        inputReader.lines().forEachOrdered(calculator::parse);   //TODO: Do we need the ordered? can reduce performance.
             // Calculator.render line
                 // Calculator has interpreter section and backend section
 }}
