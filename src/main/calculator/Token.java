@@ -9,8 +9,8 @@ enum TokenType { //TODO: Enum or hashtable?
     PREINC("\\+\\+[a-zA-Z]\\w*"),
     VARIABLE("[a-zA-Z]\\w*"),
     INTEGER("\\d+"),
-    ASSIGNABLE("[+-]?="),
-    OPERATION("[\\*/\\+-]"),
+    ASSIGN("[+-]?="),
+    OPERATOR("[\\*/\\+-]"),
     OPENBRACKET("\\("),
     CLOSEDBRACKET("\\)");
 
@@ -42,11 +42,11 @@ public class Token {
     public boolean isInteger() {
         return type == TokenType.INTEGER;
     }
-    public boolean isOperation() {
-        return type == TokenType.OPERATION;
+    public boolean isOperator() {
+        return type == TokenType.OPERATOR;
     }
-    public boolean isAssignable() {
-        return type == TokenType.ASSIGNABLE;
+    public boolean isAssign() {
+        return type == TokenType.ASSIGN;
     }
     public boolean isPostIncrement() {
         return type == TokenType.POSTINC;
@@ -60,6 +60,15 @@ public class Token {
     public boolean isClosedBracket() {
         return type == TokenType.CLOSEDBRACKET;
     }
+
+    public String getValue() {
+        return value;
+    }
+
+    public boolean isNumeric() {
+        return isVariable() || isInteger() || isPreIncrement() || isPostIncrement();
+    }
+
 }
 
 //TODO: Unit test tokenizer

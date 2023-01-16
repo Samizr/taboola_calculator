@@ -1,12 +1,12 @@
 package main.calculator;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tokenizer {
-    public static ArrayList<Token> tokenize (String string) throws Exception {
-        ArrayList<Token> tokens = new ArrayList<>();
+    public static LinkedList<Token> tokenize (String string) throws Exception {
+        LinkedList<Token> tokens = new LinkedList<>();
         Pattern typesPattern = Pattern.compile(tokenTypesRegex());
         Matcher inputMatcher = typesPattern.matcher(string);
         int matchEnd = 0;
