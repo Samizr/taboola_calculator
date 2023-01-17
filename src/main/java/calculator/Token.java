@@ -1,4 +1,4 @@
-package main.calculator;
+package main.java.calculator;
 
 import java.util.regex.Pattern;
 
@@ -70,5 +70,6 @@ public class Token {
     }
 
 }
+
 
 //TODO: Unit test tokenizer

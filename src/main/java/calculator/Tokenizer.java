@@ -1,4 +1,4 @@
-package main.calculator;
+package main.java.calculator;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
