@@ -8,7 +8,7 @@ enum TokenType { //TODO: Enum or hashtable?
     POSTINC("[a-zA-Z]\\w*\\+\\+"),
     PREINC("\\+\\+[a-zA-Z]\\w*"),
     VARIABLE("[a-zA-Z]\\w*"),
-    INTEGER("\\d+"),
+    INTEGER("[-]?\\d+"),
     ASSIGN("[+-]?="),
     OPERATOR("[\\*/\\+-]"),
     OPENBRACKET("\\("),

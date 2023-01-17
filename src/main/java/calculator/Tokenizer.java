@@ -35,5 +35,8 @@ public class Tokenizer {
         return finalRegex.toString();
     }
 
-    //TODO: this catches i+++ as legitimate
 }
+//TODO: this catches i+++ as legitimate
+
+//TODO: this can still tokenize sa @!!!
+

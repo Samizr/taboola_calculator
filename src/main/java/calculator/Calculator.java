@@ -14,24 +14,26 @@ public class Calculator {
     public void parse(String line) throws Exception {
         ListIterator<Token> tokenIterator = Tokenizer.tokenize(line).listIterator();
 
-        Token terminal;
-        if (!tokenIterator.hasNext() || !(terminal = tokenIterator.next()).isVariable()) {
-            throw new CalculatorException("Line must start with a variable");
-        }
-        String leftVar = terminal.getValue();
 
-        if (!tokenIterator.hasNext() || !(terminal = tokenIterator.next()).isAssign()) {
-            throw new CalculatorException("Missing assignment in second terminal");
-        }
-        String assignType = terminal.getValue();
-
-        if (!tokenIterator.hasNext()) {
-            throw new CalculatorException("No terminals after assign");
-        }
-        assign(leftVar, assignType, eval(tokenIterator));
-        if (openBrackets != 0) {
-            throw new CalculatorException("Open brackets left unclosed");
-        }
+        System.out.println(Tokenizer.tokenize(line).toString());
+//        Token terminal;
+//        if (!tokenIterator.hasNext() || !(terminal = tokenIterator.next()).isVariable()) {
+//            throw new CalculatorException("Line must start with a variable");
+//        }
+//        String leftVar = terminal.getValue();
+//
+//        if (!tokenIterator.hasNext() || !(terminal = tokenIterator.next()).isAssign()) {
+//            throw new CalculatorException("Missing assignment in second terminal");
+//        }
+//        String assignType = terminal.getValue();
+//
+//        if (!tokenIterator.hasNext()) {
+//            throw new CalculatorException("No terminals after assign");
+//        }
+//        assign(leftVar, assignType, eval(tokenIterator));
+//        if (openBrackets != 0) {
+//            throw new CalculatorException("Open brackets left unclosed");
+//        }
 
     }
 
