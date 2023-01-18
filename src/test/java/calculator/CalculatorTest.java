@@ -3,7 +3,6 @@ package test.java.calculator;
 import main.java.calculator.Calculator;
 import main.java.calculator.CalculatorException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

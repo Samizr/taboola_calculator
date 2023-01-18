@@ -1,20 +1,33 @@
 package main.java.calculator.node;
 
 public class IntegerNode extends Node {
-    private final int value;
+    private String integerString;
 
-    public IntegerNode(Node left, Node right, int value) {
-        super(left, right);
-        this.value = value;
+    public IntegerNode(String integerString) {
+        super();
+        this.integerString = integerString;
     }
 
+    public IntegerNode() {
+        this(null);
+    }
 
     public static String getMatchingRegex() {
-        return "\\d+";
+        return "[-]?\\d+";
     }
 
     @Override
-    public int eval() {
-        return value;
+    public Integer eval() {
+        return Integer.valueOf(integerString);
+    }
+
+    @Override
+    public void setValue(String integerString) {
+        this.integerString = integerString;
+    }
+
+    @Override
+    public boolean settable() {
+        return true;
     }
 }

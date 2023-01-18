@@ -1,13 +1,15 @@
 package main.java.calculator.node;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class OperatorNode extends Node {
     enum OperatorType {
         MUL("*"),
         ADD("+"),
         SUB("-"),
-        DIV("-");
+        DIV("/");
 
         private final String operation;
 
@@ -16,32 +18,26 @@ public class OperatorNode extends Node {
         }
     }
 
-    private final OperatorType operatorType;
+    private OperatorType operator;
 
-    public OperatorNode(Node left, Node right, String operation) {
-        super(left, right);
-        switch (operation) {
-            case ("*") -> operatorType = OperatorType.MUL;
-            case ("/") -> operatorType = OperatorType.DIV;
-            case ("+") -> operatorType = OperatorType.ADD;
-            case ("-") -> operatorType = OperatorType.SUB;
-            // We shouldn't reach this by design of parent parser.
-            default -> throw new IllegalStateException("Unexpected operation: " + operation);
-        }
+    public OperatorNode() {
+        super();
+    }
+
+    public OperatorNode(Node left, Node right, Node parent) {
+        super(left, right, parent);
     }
 
     public static String getMatchingRegex() {
-        StringBuilder sb = new StringBuilder();
-        for (OperatorType type : OperatorType.values()) {
-            String operation = "\\" + type.operation;
-            sb.append(operation);
-        }
-        return Pattern.quote(sb.toString());
+        StringBuilder sb = new StringBuilder("[");
+        for (OperatorType type: OperatorType.values())
+            sb.append("\\%s".formatted(type.operation));
+        return sb.append("]").toString();
     }
 
     @Override
-    public int eval() {
-        switch (operatorType) {
+    public Integer eval() {
+        switch (operator) {
             case MUL -> {
                 return left.eval() * right.eval();
             }
@@ -56,5 +52,21 @@ public class OperatorNode extends Node {
             }
 
         }
+    }
+
+    @Override
+    public void setValue(String operator) {
+        switch (operator) {
+            case ("*") -> this.operator = OperatorType.MUL;
+            case ("/") -> this.operator = OperatorType.DIV;
+            case ("+") -> this.operator = OperatorType.ADD;
+            case ("-") -> this.operator = OperatorType.SUB;
+            default -> throw new IllegalStateException("Expected operator but got: " + operator);
+            //todo: unify exceptions.
+        }
+    }
+    @Override
+    public boolean settable() {
+        return true;
     }
 }

@@ -8,21 +8,28 @@ public class VariableStore extends LinkedHashMap<String, Integer> {
     }
 
     public void assign(String var, Integer value) {
+        if (!super.containsKey(var)) {
+            throw new CalculatorException(String.format("Variable %s undefined", var));
+        }
         super.put(var, value);
     }
 
-    public void addToVariable(String var, Integer value) {
+    public Integer addToVariable(String var, Integer value) {
         if (!super.containsKey(var)) {
             throw new CalculatorException(String.format("Variable %s undefined", var));
         }
-        assign(var, super.get(var) + value);
+        Integer finalValue = super.get(var) + value;
+        assign(var, finalValue);
+        return finalValue;
     }
 
-    public void subtractFromVariable(String var, Integer value) {
+    public Integer subtractFromVariable(String var, Integer value) {
         if (!super.containsKey(var)) {
             throw new CalculatorException(String.format("Variable %s undefined", var));
         }
-        assign(var, super.get(var) - value);
+        Integer finalValue = super.get(var) - value;
+        assign(var, finalValue);
+        return finalValue;
     }
 
 }
