@@ -57,11 +57,8 @@ public class Calculator {
                 if (curr.getLeft() == null) {
                     curr.setLeft(node);
                 }
-                else if (curr.getRight() == null) {
-                    curr.setRight(node);
-                }
                 else {
-                    throw new CalculatorException("Two consecutive evaluables", token.getValue());
+                    curr.setRight(node);
                 }
             }
 
