@@ -3,6 +3,7 @@ package test.java.calculator;
 import main.java.calculator.Calculator;
 import main.java.calculator.CalculatorException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,15 @@ public class CalculatorTest {
         assertStateEquals("(i=82,j=1,x=6,y=80)");
     }
 
+    @Disabled
+    public void testNegativesSuccess() {
+        assertParseDoesNotThrow( "i = -3");
+        assertParseDoesNotThrow( "j = i-3");
+        assertParseDoesNotThrow( "k = -3 + i");
+
+        assertStateEquals("(i=-3,j=-6,k=-6");
+    }
+
     @Test
     public void testBasicIncrementSuccess() {
         assertParseDoesNotThrow( "x = 10");
@@ -39,18 +49,15 @@ public class CalculatorTest {
 
     @Test
     public void testBasicBracketSuccess() {
-//        assertParseDoesNotThrow("x = 5 * (3 + 2)");
-//        assertParseDoesNotThrow("y = (2 * (3 + 2))");
-//        assertParseDoesNotThrow("z = (2 + 5) * (3 + 2)");
-//        assertParseDoesNotThrow("a = (2)");
-//        assertParseDoesNotThrow("a = ((3))");
-        assertParseDoesNotThrow("c = 19-4 + 2");
-//        assertParseDoesNotThrow("b = ((5 - 3) + 2 * (19-4 + 2))");
+        assertParseDoesNotThrow("x = 5 * (3 + 2)");
+        assertParseDoesNotThrow("y = (2 * (3 + 2))");
+        assertParseDoesNotThrow("z = (2 + 5) * (3 + 2)");
+        assertParseDoesNotThrow("a = (2)");
+        assertParseDoesNotThrow("a = ((3))");
+        assertParseDoesNotThrow("b = ((5 - 3) + 2 * (19-4 + 2))");
 
 
-//        assertStateEquals("(x=25,y=10,z=35,a=3,b=36)");
-        assertStateEquals("(x=25,y=10,z=35,a=3,c=17)");
-        assertStateEquals("(c=13)");
+        assertStateEquals("(x=25,y=10,z=35,a=3,b=36)");
     }
 
     @Test
@@ -65,7 +72,6 @@ public class CalculatorTest {
 
     @Test
     public void testMissingAssignFailure() {
-        String expectedString = "Missing assignment in second terminal";
         assertParseThrowsCalculatorException("x");
         assertParseThrowsCalculatorException("x =+ 10");
         assertParseThrowsCalculatorException("x + 10");
@@ -74,15 +80,12 @@ public class CalculatorTest {
 
     @Test
     public void testMissingTerminalsAfterAssignFailure() {
-        String expectedString = "No terminals after assign";
         assertParseThrowsCalculatorException("x=");
         assertParseThrowsCalculatorException("x +=");
     }
 
-
-
     private void assertParseDoesNotThrow(String line) {
-        assertDoesNotThrow(() -> calculator.parse(line));
+        assertDoesNotThrow(() -> calculator.calculate(line));
     }
 
     private void assertStateEquals(String line) {
@@ -90,33 +93,13 @@ public class CalculatorTest {
     }
 
     private void assertParseThrowsCalculatorException(String line) {
-        assertThrows(CalculatorException.class, () -> calculator.parse(line));
+        assertThrows(CalculatorException.class, () -> calculator.calculate(line));
     }
 
     private void assertParseThrowsCalculatorException(String line, String expectedMessage) {
-        Exception exception = assertThrows(CalculatorException.class, () -> calculator.parse(line));
+        Exception exception = assertThrows(CalculatorException.class, () -> calculator.calculate(line));
         assertEquals(exception.getMessage(), expectedMessage);
     }
 
 }
-//public class CalculatorTest {
-//}
 
-
-//Fail in parsing these:
-//        alo =-
-//        Operation not completed
-//        alo = -5
-//        [VARIABLE: alo, ASSIGNABLE: =, OPERATION: -, INTEGER: 5]
-//        prime += (op)
-//        [VARIABLE: prime, ASSIGNABLE: +=, OPENBRACKET: (, VARIABLE: op, CLOSEDBRACKET: )]
-//        prime -= (i + left + 5
-//        Expression has too many open brackets
-//        prime -= (oos ))
-//        Closed bracket missing open bracket
-//        ptime e= (
-//        Missing assignment in second terminal
-//        x = 9 * (i + 2) *(i- 2) /2 + (1 + (15 + 2 ))
-//        [VARIABLE: x, ASSIGNABLE: =, INTEGER: 9, OPERATION: *, OPENBRACKET: (, VARIABLE: i, OPERATION: +, INTEGER: 2, CLOSEDBRACKET: ), OPERATION: *, OPENBRACKET: (, VARIABLE: i, OPERATION: -, INTEGER: 2, CLOSEDBRACKET: ), OPERATION: /, INTEGER: 2, OPERATION: +, OPENBRACKET: (, INTEGER: 1, OPERATION: +, OPENBRACKET: (, INTEGER: 15, OPERATION: +, INTEGER: 2, CLOSEDBRACKET: ), CLOSEDBRACKET: )]
-//        x = 3 * 12 *
-//        Operation not completed

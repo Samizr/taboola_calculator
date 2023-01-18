@@ -1,8 +1,5 @@
 package main.java.calculator.token;
 
-import main.java.calculator.node.IntegerNode;
-import main.java.calculator.node.OperatorNode;
-
 import java.util.regex.Pattern;
 
 enum TokenType {
@@ -13,10 +10,9 @@ enum TokenType {
     POSTINC("[a-zA-Z]\\w*\\+\\+"),
     POSTDEC("[a-zA-Z]\\w*--"),
     VARIABLE("[a-zA-Z]\\w*"),
-
-    INTEGER(IntegerNode.getMatchingRegex()),
     ASSIGN("[+-]?="),
-    OPERATOR(OperatorNode.getMatchingRegex()),
+    OPERATOR("[\\+\\*-/]"),
+    INTEGER("\\d+"),
     OPENBRACKET("\\("),
     CLOSEDBRACKET("\\)");
 
@@ -63,6 +59,9 @@ public class Token {
     public boolean isOperator() {
         return type == TokenType.OPERATOR;
     }
+    public boolean isPriorityOperator() {
+        return isOperator() && (value.contains("*") || value.contains("/"));
+    }
     public boolean isAssign() {
         return type == TokenType.ASSIGN;
     }
@@ -74,16 +73,13 @@ public class Token {
     }
 
     public boolean isEvaluable() {
-        return isPostInc() || isPostDec() || isPreInc() || isPreDec() || isInteger() || isVariable();
+        return isPostInc() || isPostDec() || isPreInc() || isPreDec() || isInteger() || isVariable() || isOpenBracket();
     }
 
     public String getValue() {
         return value;
     }
 
-//    public boolean isNumeric() {
-//        return isVariable() || isInteger();
-//    }
 
 }
 

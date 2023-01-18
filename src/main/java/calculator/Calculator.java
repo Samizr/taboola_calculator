@@ -1,65 +1,77 @@
 package main.java.calculator;
 
-import main.java.calculator.node.IntegerNode;
 import main.java.calculator.node.Node;
-import main.java.calculator.node.OperatorNode;
-import main.java.calculator.node.RootNode;
 import main.java.calculator.token.Token;
 import main.java.calculator.token.Tokenizer;
 
 import java.util.*;
 
 public class Calculator {
-
+    private Tokenizer tokenizer;
     private final VariableStore variables;
 
     public Calculator() {
         variables = new VariableStore();
     }
-    public void parse(String line) throws Exception {
-        //TODO: enabled support for both assignable and increments.
-        Tokenizer tokenizer = new Tokenizer(line);
+
+    public void calculate(String line) throws Exception {
+        tokenizer = new Tokenizer(line);
+
+        String leftVar =  tokenizer.nextToken().getValue();
+        String assignType =  tokenizer.nextToken().getValue();
+
+        Node parseTree = parse();
+        variables.assign(leftVar, assignType, parseTree.eval(variables));
+    }
+    private Node parse() throws Exception {
         Node root = new Node();
         Node curr = root;
         Token token;
         while ((token = tokenizer.nextToken()) != null) {
-//            If the current token is a '(', add a new node as the left child of the current node, and descend to the left child.
-            if (token.isOpenBracket()) {
-                Node newNode = new Node();
-                curr.setLeft(newNode);
-                newNode.setParent(curr);
-                curr = newNode;
+            if (token.isOperator()) {
+                Token currToken = curr.getToken();
+                if (currToken == null) {
+                    curr.setToken(token);
+                } else if (token.isPriorityOperator()) {
+                    while (curr != null && curr.getToken().isPriorityOperator()) {
+                        curr = curr.getParent();
+                    }
+                    if (curr != null) {
+                        Node node = new Node(curr.getRight(), null, token);
+                        curr.setRight(node);
+                        curr = node;
+                    } else {
+                        Node node = new Node(root, null, token);
+                        curr = root = node;
+                    }
+                } else {
+                    Node node = new Node(root, null, token);
+                    curr = root = node;
+                }
             }
-//            If the current token is in the list ['+','-','/','*'], set the root value of the current node to the operator represented by the current token. Add a new node as the right child of the current node and descend to the right child.
-            else if (token.isOperator()) {
-//                IntegerNode newNode = new IntegerNode();
-                Node newNode = new Node();
-                curr.setToken(token);
-                curr.setRight(newNode);
-                newNode.setParent(curr);
-                curr = newNode;
-            }
-//            If the current token is a number, set the root value of the current node to the number and return to the parent.
 
             else if (token.isEvaluable()) {
-                curr.setToken(token);
-                curr = curr.getParent();
+                // Open brackets open new trees!
+                Node node = token.isOpenBracket() ? parse() : new Node(token);
 
-                //                if (!curr.settable()) {
-//                    IntegerNode newRoot = new IntegerNode();
-//                    root = newRoot;
-//                    curr = newRoot;
-//                }
-
+                if (curr.getLeft() == null) {
+                    curr.setLeft(node);
+                }
+                else if (curr.getRight() == null) {
+                    curr.setRight(node);
+                }
+                else {
+                    throw new CalculatorException("Two consecutive evaluables", token.getValue());
+                }
             }
 
             else { //Token is closing bracket
-                curr = curr.getParent();
+                return root;
             }
         }
-
+        return root;
     }
-    //TODO: Are we supporting x = -5 or y = -3 + 1
+    //TODO: should support x = -5 or y = -3 + 1
     public String getState() {
         List<String> variablesAsStrings = new ArrayList<>();
         for (String key: variables.keySet()) {
@@ -68,7 +80,4 @@ public class Calculator {
         return String.format("(%s)", String.join(",",variablesAsStrings));
     }
 
-    public void clearState() {
-        variables.clear();
-    }
 }
